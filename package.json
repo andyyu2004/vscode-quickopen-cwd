@@ -1,8 +1,10 @@
 {
   "name": "quickopen-currentdir",
   "displayName": "QuickOpen CurrentDir",
+  "publisher": "andyyu2004",
   "description": "Quickopen fuzzy find for files limited to current directory (non-recursive)",
-  "version": "0.0.1",
+  "version": "0.0.2",
+  "repository": "https://github.com/andyyu2004/vscode-quickopen-cwd",
   "engines": {
     "vscode": "^1.46.0"
   },
