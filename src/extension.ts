@@ -1,4 +1,4 @@
-import { workspace } from "vscode";
+import { window, workspace } from "vscode";
 import * as vscode from "vscode";
 import * as cp from "child_process";
 import * as split from "split2";
@@ -6,21 +6,29 @@ import * as split from "split2";
 export function activate(context: vscode.ExtensionContext) {
   let disposable = vscode.commands.registerCommand(
     "quickopen-currentdir.quick-open-current-dir",
-    quickOpenCurrentDir
+    () => quickOpenCurrentDir()
   );
 
   context.subscriptions.push(disposable);
 }
 
 async function quickOpenCurrentDir() {
-  console.log("hello");
-  // const files = await getFiles();
+  // const items = await getFiles();
   // console.log(files);
+  const quickPick = window.createQuickPick<File>();
+  // quickPick.matchOnDescription = false;
+  // quickPick.matchOnDetail = true;
+  // quickPick.placeholder = "Search";
+  const items = [{ label: "werr" }];
+  console.log("populateSearch returned", items);
+  if (!items) {
+    return;
+  }
+  quickPick.items = items;
+  quickPick.show();
 }
 
-type File = {
-  filename: string;
-};
+interface File extends vscode.QuickPickItem {}
 
 function getFiles(): Promise<File[]> {
   const cwd = workspace.workspaceFolders![0].uri.fsPath;
@@ -34,7 +42,7 @@ function getFiles(): Promise<File[]> {
     stream.on("end", () => resolve(files));
     stream.on("error", () => reject("stream failed"));
     stream.on("data", (filename: string) => {
-      files.push({ filename });
+      files.push({ label: filename });
     });
   });
 }
